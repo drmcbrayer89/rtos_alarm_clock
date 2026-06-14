@@ -1,0 +1,4 @@
+/home/ryanm/github/rtos_alarm_clock/Core/Src/stm32u0xx_it.c:70:6:NMI_Handler	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/stm32u0xx_it.c:85:6:HardFault_Handler	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/stm32u0xx_it.c:107:6:EXTI4_15_IRQHandler	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/stm32u0xx_it.c:124:6:TIM2_IRQHandler	8	static

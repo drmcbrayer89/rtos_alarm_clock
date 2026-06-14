@@ -1,0 +1,4 @@
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app.c:40:13:app_init_tasks	88	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app.c:52:13:app_init_hw	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app.c:56:6:app_entry	32	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app.c:83:6:app_init_interfaces	16	static

@@ -1,0 +1,2 @@
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app_freertos.c:65:6:MX_FREERTOS_Init	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/app_freertos.c:104:6:StartDefaultTask	16	static

@@ -1,0 +1,4 @@
+/home/ryanm/github/rtos_alarm_clock/Core/Src/log.c:13:6:log_at_alt	152	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/log.c:24:6:log_at	16	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/log.c:28:6:log_at_task	152	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/log.c:37:6:log_at_init	16	static
