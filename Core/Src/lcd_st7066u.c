@@ -8,6 +8,8 @@
 
 #include "log.h"
 
+LCD_MODE g_lcd_mode = LCD_8BIT;
+
 typedef struct {
 	GPIO_TypeDef * port;
 	uint32_t pin;
@@ -26,25 +28,53 @@ LCD_GPIO_PIN db[16] = {
 		[LCD_PIN_DB7] 	= {.port = GPIOC, .pin = GPIO_PIN_6} // 6
 };
 
-void lcd_write(LCD_INSTR ins) {
+void lcd_write_nibble(LCD_INSTR ins, uint8_t nib) {
+	/* Set RS */
 	HAL_GPIO_WritePin(db[LCD_PIN_RS].port, db[LCD_PIN_RS].pin, ins.rs ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	// Write to DB0-DB7 output pins
-	HAL_GPIO_WritePin(db[LCD_PIN_DB7].port, db[LCD_PIN_DB7].pin, (ins.data & 0x80) ? GPIO_PIN_SET : GPIO_PIN_RESET); 								//GPIO_PIN_SET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB6].port, db[LCD_PIN_DB6].pin, (ins.data & 0x40) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB5].port, db[LCD_PIN_DB5].pin, (ins.data & 0x20) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB4].port, db[LCD_PIN_DB4].pin, (ins.data & 0x10) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB3].port, db[LCD_PIN_DB3].pin, (ins.data & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB2].port, db[LCD_PIN_DB2].pin, (ins.data & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB1].port, db[LCD_PIN_DB1].pin, (ins.data & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(db[LCD_PIN_DB0].port, db[LCD_PIN_DB0].pin, (ins.data & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	/* Set data bus */
+	HAL_GPIO_WritePin(db[LCD_PIN_DB7].port, db[LCD_PIN_DB7].pin, (nib & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET); 								//GPIO_PIN_SET);
+	HAL_GPIO_WritePin(db[LCD_PIN_DB6].port, db[LCD_PIN_DB6].pin, (nib & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(db[LCD_PIN_DB5].port, db[LCD_PIN_DB5].pin, (nib & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(db[LCD_PIN_DB4].port, db[LCD_PIN_DB4].pin, (nib & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 
+	/* Pulse E for sending */
 	osDelay(5);
-	// Enable E
 	HAL_GPIO_WritePin(db[LCD_PIN_E].port, db[LCD_PIN_E].pin, GPIO_PIN_SET);
 	osDelay(5);
-	// Clear E
 	HAL_GPIO_WritePin(db[LCD_PIN_E].port, db[LCD_PIN_E].pin, GPIO_PIN_RESET);
 	osDelay(5);
+}
+
+void lcd_write(LCD_INSTR ins) {
+
+	if(g_lcd_mode == LCD_4BIT) {
+		uint8_t upper = (ins.data >> 4) & 0x0F;
+		uint8_t lower = (ins.data & 0x0F);
+
+		lcd_write_nibble(ins, upper);
+		lcd_write_nibble(ins, lower);
+	}
+
+	if(g_lcd_mode == LCD_8BIT) {
+		HAL_GPIO_WritePin(db[LCD_PIN_RS].port, db[LCD_PIN_RS].pin, ins.rs ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		// Write to DB0-DB7 output pins
+		HAL_GPIO_WritePin(db[LCD_PIN_DB7].port, db[LCD_PIN_DB7].pin, (ins.data & 0x80) ? GPIO_PIN_SET : GPIO_PIN_RESET); 								//GPIO_PIN_SET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB6].port, db[LCD_PIN_DB6].pin, (ins.data & 0x40) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB5].port, db[LCD_PIN_DB5].pin, (ins.data & 0x20) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB4].port, db[LCD_PIN_DB4].pin, (ins.data & 0x10) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB3].port, db[LCD_PIN_DB3].pin, (ins.data & 0x08) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB2].port, db[LCD_PIN_DB2].pin, (ins.data & 0x04) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB1].port, db[LCD_PIN_DB1].pin, (ins.data & 0x02) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(db[LCD_PIN_DB0].port, db[LCD_PIN_DB0].pin, (ins.data & 0x01) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+
+		osDelay(5);
+		// Enable E
+		HAL_GPIO_WritePin(db[LCD_PIN_E].port, db[LCD_PIN_E].pin, GPIO_PIN_SET);
+		osDelay(5);
+		// Clear E
+		HAL_GPIO_WritePin(db[LCD_PIN_E].port, db[LCD_PIN_E].pin, GPIO_PIN_RESET);
+		osDelay(5);
+	}
 }
 void lcd_clear_display(void) {
 	LCD_INSTR instr = { .rs = 0, .rw = 0, .data = 0x01 };
@@ -138,12 +168,29 @@ void lcd_write_msg(uint8_t row, uint8_t col, char * str) {
 	lcd_write_string(str);
 }
 
-void lcd_init(void) {
+void lcd_init(LCD_MODE mode) {
+	g_lcd_mode = mode;
 	osDelay(200);
-	// func set #1-#3
-	lcd_func_set(1, 1, 0);
-	lcd_func_set(1, 1, 0);
-	lcd_func_set(1, 1, 0);
+	if(g_lcd_mode == LCD_4BIT) {
+		LCD_INSTR ins = {.rs = 0, .data = 0x03 };
+		lcd_write_nibble(ins, ins.data);
+		osDelay(5);
+		lcd_write_nibble(ins, ins.data);
+		osDelay(5);
+		lcd_write_nibble(ins, ins.data);
+		osDelay(5);
+		ins.data = 0x02;
+		lcd_write_nibble(ins, ins.data);
+		osDelay(5);
+		ins.rs = 0;
+		ins.data = 0x28;
+		lcd_write(ins);
+	} else if(g_lcd_mode == LCD_8BIT) {
+		//func set #1-#3
+		lcd_func_set(1, 1, 0);
+		lcd_func_set(1, 1, 0);
+		lcd_func_set(1, 1, 0);
+	}
 	// turn on display, cursor OFF, blink OFF
 	lcd_display_on_off(1, 0, 0);
 	osDelay(5);
@@ -151,15 +198,10 @@ void lcd_init(void) {
 	lcd_clear_display();
 	osDelay(5);
 	// cursor/blinker moves RIGHT when DDRAM is increased, shift display
-	lcd_entry_mode_set(1, 0);
-	lcd_write_string("FreeRTOS Clock");
-
-	lcd_set_cursor(1,0);
-	lcd_write_string("Ryan McBrayer");
-
-	lcd_set_cursor(2,0);
-	lcd_write_string("2026");
-
+	lcd_write_msg(0,0, "FreeRTOS Clock");
+	lcd_write_msg(1,0, "Ryan McBrayer");
+	lcd_write_msg(2,0, "2026");
+	// delay 2s then clear display :)
 	osDelay(2000);
 	lcd_clear_display();
 }

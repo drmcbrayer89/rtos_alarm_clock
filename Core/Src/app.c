@@ -50,7 +50,7 @@ static void app_init_tasks(void) {
 }
 
 static void app_init_hw(void) {
-	lcd_init();
+	lcd_init(LCD_4BIT);
 }
 
 void app_entry(void * arg) {

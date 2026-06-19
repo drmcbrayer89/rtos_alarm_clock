@@ -17,4 +17,6 @@
 #define TRUE 1
 #define FALSE 0
 
+#define byte char
+
 #endif /* RTOSALARM_CORE_INC_COMMON_H_ */

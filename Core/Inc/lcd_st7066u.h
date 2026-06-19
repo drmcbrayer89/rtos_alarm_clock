@@ -24,17 +24,6 @@ typedef enum {
 	LCD_PIN_COUNT
 } LCD_PIN_ENUM;
 
-typedef enum {
-	LCD_CLEAR,
-	LCD_RETURN,
-	LCD_ENTRY_MODE_SET,
-	LCD_DISPLAY_ON,
-	LCD_CURSOR_DISPLAY_SHIFT,
-	LCD_FUNC_SET,
-	LCD_WRITE_RAM,
-	LCD_READ_RAM
-} LCD_INSTRUCTION_ENUM;
-
 typedef struct {
 	uint8_t rs;
 	uint8_t rw;
@@ -52,9 +41,14 @@ typedef enum {
 	LCD_DB7,
 } LCD_DATA_PINS;
 
+typedef enum {
+	LCD_4BIT,
+	LCD_8BIT
+} LCD_MODE;
+
 void lcd_write(LCD_INSTR ins);
 void lcd_clear_display(void);
-void lcd_init(void);
+void lcd_init(LCD_MODE mode);
 void lcd_write_char(char c);
 void lcd_write_time(char h, char m1, char m2);
 void lcd_set_cursor(uint8_t row, uint8_t col);
