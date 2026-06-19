@@ -1,8 +1,8 @@
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:29:13:rtc_alarm	8	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:34:13:rtc_write_time	24	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:51:13:rtc_set_time	48	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:63:6:rtc_set_hours	16	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:83:6:rtc_set_minutes	16	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:102:6:rtc_alarm_toggle	8	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:115:6:rtc_task	24	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:144:17:rtc_init	16	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:31:13:rtc_alarm	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:35:13:rtc_write_time	24	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:52:6:rtc_set_hours	16	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:71:6:rtc_set_minutes	16	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:89:6:rtc_alarm_toggle	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:94:6:rtc_task	24	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:137:13:rtc_alarm_display_init	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/clock.c:142:17:rtc_init	16	static

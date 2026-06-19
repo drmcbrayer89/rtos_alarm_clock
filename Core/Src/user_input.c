@@ -17,20 +17,20 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin) {
 	if(press_time - last_press_time > DEBOUNCE_DELAY) {
 		switch(GPIO_Pin) {
 			case INPUT_TIME_HOURS:
-				rtc_set_hours(CLOCK_TIME);
+				rtc_set_hours(MODE_TIME);
 				break;
 			case INPUT_TIME_MINS:
-				rtc_set_minutes(CLOCK_TIME);
+				rtc_set_minutes(MODE_TIME);
 				break;
 			case INPUT_ALARM_ENABLE:
 				rtc_alarm_toggle();
 				break;
 			case INPUT_ALARM_HOURS:
-				rtc_set_hours(CLOCK_ALARM);
+				rtc_set_hours(MODE_ALARM);
 				log_at_alt("hi!\r\n");
 				break;
 			case INPUT_ALARM_MINS:
-				rtc_set_minutes(CLOCK_ALARM);
+				rtc_set_minutes(MODE_ALARM);
 			default:
 				break;
 		}

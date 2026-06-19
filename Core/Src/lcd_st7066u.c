@@ -123,6 +123,7 @@ void lcd_set_cursor(uint8_t row, uint8_t col) {
 
 	LCD_INSTR instr = { .rs = 0, .rw = 0, .data = addr };
 	lcd_write(instr);
+	osDelay(50);
 }
 
 void lcd_write_string(char * str) {
@@ -130,6 +131,11 @@ void lcd_write_string(char * str) {
 	for(int i = 0; i < len; i++) {
 		lcd_write_char(str[i]);
 	}
+}
+
+void lcd_write_msg(uint8_t row, uint8_t col, char * str) {
+	lcd_set_cursor(row, col);
+	lcd_write_string(str);
 }
 
 void lcd_init(void) {

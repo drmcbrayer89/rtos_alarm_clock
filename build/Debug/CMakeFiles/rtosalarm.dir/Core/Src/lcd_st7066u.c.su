@@ -9,5 +9,6 @@
 /home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:89:9:lcd_read_ram	16	static
 /home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:95:6:lcd_write_char	24	static
 /home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:103:6:lcd_set_cursor	24	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:128:6:lcd_write_string	24	static
-/home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:135:6:lcd_init	8	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:129:6:lcd_write_string	24	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:136:6:lcd_write_msg	16	static
+/home/ryanm/github/rtos_alarm_clock/Core/Src/lcd_st7066u.c:141:6:lcd_init	8	static

@@ -59,5 +59,6 @@ void lcd_write_char(char c);
 void lcd_write_time(char h, char m1, char m2);
 void lcd_set_cursor(uint8_t row, uint8_t col);
 void lcd_write_string(char * str);
+void lcd_write_msg(uint8_t row, uint8_t col, char * str);
 
 #endif /* RTOSALARM_CORE_INC_LCD_ST7066U_H_ */

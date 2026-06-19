@@ -16,8 +16,8 @@
 #define INPUT_ALARM_ENABLE GPIO_PIN_4
 
 typedef enum {
-	CLOCK_TIME,
-	CLOCK_ALARM
+	MODE_TIME,
+	MODE_ALARM
 } CLOCK_MODE;
 
 osSemaphoreId_t rtc_init(RTC_HandleTypeDef * rtc);
