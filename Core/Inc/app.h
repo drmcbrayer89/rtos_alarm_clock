@@ -13,6 +13,7 @@
 typedef struct {
 	UART_HandleTypeDef  * p_uart;
 	RTC_HandleTypeDef   * p_rtc;
+	TIM_HandleTypeDef   * p_timer;
 } APP_INTERFACES;
 
 typedef enum {
@@ -29,6 +30,6 @@ typedef struct {
 } TASK;
 
 void app_entry(void * arg);
-void app_init_interfaces(UART_HandleTypeDef * uart, RTC_HandleTypeDef * rtc);
+void app_init_interfaces(UART_HandleTypeDef * uart, RTC_HandleTypeDef * rtc, TIM_HandleTypeDef * timer);
 
 #endif /* RTOSALARMCLOCK_CORE_INC_APP_H_ */

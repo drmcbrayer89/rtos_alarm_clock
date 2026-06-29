@@ -20,6 +20,7 @@
 
 static osSemaphoreId_t sem;
 static RTC_HandleTypeDef * p_rtc;
+static TIM_HandleTypeDef * p_timer;
 static RTC_TimeTypeDef time = {0};
 static RTC_DateTypeDef date = {0};
 static RTC_TimeTypeDef time_start = { .Hours = 12, .Minutes = 00, .Seconds = 0};
@@ -27,9 +28,15 @@ static RTC_TimeTypeDef alarm_time = { .Hours = 11, .Minutes = 00, .Seconds = 0};
 static uint32_t g_alarm_armed = FALSE;
 static uint8_t g_alarm_triggered = FALSE;
 static uint8_t g_alarm_reset = FALSE;
+static uint8_t g_alarm_buzzer_enable = FALSE;
 
 static void rtc_alarm(void) {
 	lcd_write_msg(ALARM_ALERT_LOCATION, WAKE_UP_MESSAGE);
+	if(!g_alarm_buzzer_enable) {
+		// Start high pitched noise!
+		HAL_TIM_PWM_Start(p_timer, TIM_CHANNEL_2);
+		g_alarm_buzzer_enable = TRUE;
+	}
 }
 
 static void rtc_write_time(uint8_t hours, uint8_t minutes, CLOCK_MODE mode){
@@ -90,6 +97,9 @@ void rtc_set_minutes(CLOCK_MODE mode) {
 
 void rtc_alarm_toggle(void) {
 	g_alarm_armed = !g_alarm_armed;
+	if(g_alarm_buzzer_enable) {
+		g_alarm_buzzer_enable = FALSE;
+	}
 	g_alarm_reset = TRUE;
 }
 
@@ -129,6 +139,7 @@ void rtc_task(void * arg) {
 			}
 			g_alarm_triggered = FALSE;
 			g_alarm_reset = FALSE;
+			HAL_TIM_PWM_Stop(p_timer, TIM_CHANNEL_2);
 		}
 		time_last = time;
 		alarm_last = alarm_time;
@@ -140,12 +151,15 @@ static void rtc_alarm_display_init(void) {
 	(g_alarm_armed) ? lcd_write_msg(ALARM_LABEL_LOCATION, "Alarm: ON") : lcd_write_msg(ALARM_LABEL_LOCATION, "Alarm: OFF");
 }
 
-osSemaphoreId_t rtc_init(RTC_HandleTypeDef * rtc) {
+osSemaphoreId_t rtc_init(RTC_HandleTypeDef * rtc, TIM_HandleTypeDef * timer) {
 	p_rtc = rtc;
+	p_timer = timer;
 
 	HAL_RTC_SetTime(p_rtc, &time_start, RTC_FORMAT_BIN);
 	rtc_alarm_display_init();
 	
+	//HAL_TIM_PWM_Start(timer, TIM_CHANNEL_2);
+
 	sem = osSemaphoreNew(1, 1, NULL);
 	return sem;
 }

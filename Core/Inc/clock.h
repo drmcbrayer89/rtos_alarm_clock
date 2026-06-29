@@ -20,7 +20,7 @@ typedef enum {
 	MODE_ALARM
 } CLOCK_MODE;
 
-osSemaphoreId_t rtc_init(RTC_HandleTypeDef * rtc);
+osSemaphoreId_t rtc_init(RTC_HandleTypeDef * rtc, TIM_HandleTypeDef * timer);
 void rtc_task(void * arg);
 void rtc_set_hours(CLOCK_MODE mode);
 void rtc_set_minutes(CLOCK_MODE mode);

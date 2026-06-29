@@ -39,13 +39,13 @@ APP_INTERFACES iface;
 
 static void app_init_tasks(void) {
 	/* Init log_at_task */
-	const osThreadAttr_t log_at_attr = { .name = "log_at", .stack_size = 2048};
+	const osThreadAttr_t log_at_attr = {.name = "log_at", .stack_size = 2048};
 	log_at_init(iface.p_uart);
 	osThreadNew(log_at_task, NULL, &log_at_attr);
 
 	/* Init RTC task */
-	const osThreadAttr_t rtc_attr = { .name = "rtc"};
-	task_list[tCLOCK].sem = rtc_init(iface.p_rtc);
+	const osThreadAttr_t rtc_attr = {.name = "rtc"};
+	task_list[tCLOCK].sem = rtc_init(iface.p_rtc, iface.p_timer);
 	osThreadNew(rtc_task, NULL, &rtc_attr);
 }
 
@@ -80,7 +80,8 @@ void app_entry(void * arg) {
 	}
 }
 
-void app_init_interfaces(UART_HandleTypeDef * uart, RTC_HandleTypeDef * rtc) {
+void app_init_interfaces(UART_HandleTypeDef * uart, RTC_HandleTypeDef * rtc, TIM_HandleTypeDef * timer) {
 	iface.p_uart = uart;
 	iface.p_rtc = rtc;
+	iface.p_timer = timer;
 }

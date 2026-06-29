@@ -172,16 +172,12 @@ void lcd_init(LCD_MODE mode) {
 	g_lcd_mode = mode;
 	osDelay(200);
 	if(g_lcd_mode == LCD_4BIT) {
-		LCD_INSTR ins = {.rs = 0, .data = 0x03 };
+		LCD_INSTR ins = {.rs = 0, .data = 0x03};
 		lcd_write_nibble(ins, ins.data);
-		osDelay(5);
 		lcd_write_nibble(ins, ins.data);
-		osDelay(5);
 		lcd_write_nibble(ins, ins.data);
-		osDelay(5);
 		ins.data = 0x02;
 		lcd_write_nibble(ins, ins.data);
-		osDelay(5);
 		ins.rs = 0;
 		ins.data = 0x28;
 		lcd_write(ins);
