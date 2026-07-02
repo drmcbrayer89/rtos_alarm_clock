@@ -24,7 +24,7 @@
 
 TASK task_list[tTASK_NUM] = {
 		[tLOG] 		= 	{.func = log_at_task, .timeout = ONESHOT, .ticks = 0,    .sem = NULL},
-		[tCLOCK] 	= 	{.func = rtc_task,    .timeout = HZ_5,    .ticks = HZ_5, .sem = NULL}
+		[tCLOCK] 	= 	{.func = rtc_task,    .timeout = HZ_10,    .ticks = HZ_10, .sem = NULL}
 };
 
 typedef enum {
